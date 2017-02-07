@@ -2,8 +2,10 @@ package com.example.suadahaji.todoapplication.todo;
 
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.suadahaji.todoapplication.NotesViewHolder;
 import com.example.suadahaji.todoapplication.models.Note;
@@ -20,30 +22,35 @@ public interface TodoScreen {
         // View operations permitted to the Presenter
         Context getAppContext();
         Context getActivityContext();
-
+        void showToast(Toast toast);
+        void showProgress();
+        void hideProgress();
+        void showAlert(AlertDialog dialog);
+        void notifyItemRemoved(int position);
+        void notifyDataSetChanged();
         void notifyItemInserted(int layoutPosition);
         void notifyItemRangeChanged(int positionStart, int itemCount);
+        void clearEditText();
     }
 
     /**
      * Operations offered to the View for comm with Presenter
      */
-    interface ProvidedPresenterOps{
-        // Presenter operations permitted to the View
-        void clickNewNote(EditText editText);
-        // setting up the recycler adapter
-        int getNotesCount();
+    interface ProvidedPresenterOps {
+        void onDestroy(boolean isChangingConfiguration);
+        void setView(RequiredViewOps view);
         NotesViewHolder createViewHolder(ViewGroup parent, int viewType);
         void bindViewHolder(NotesViewHolder holder, int position);
-
-
+        int getNotesCount();
+        void clickNewNote(EditText editText);
+        void clickDeleteNote(Note note, int adapterPos, int layoutPos);
     }
 
     /**
-     * Required Presenter operations available to Model
+     * Required Presenter methods available to Model.
+     *      Model to Presenter
      */
-    interface RequiredPresenterOps{
-        // Presenter operations permitted to the Model
+    interface RequiredPresenterOps {
         Context getAppContext();
         Context getActivityContext();
     }
